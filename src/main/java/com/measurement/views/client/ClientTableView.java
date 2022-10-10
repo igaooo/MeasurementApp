@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.measurement.config.Constants;
 import com.measurement.config.Page;
 import com.measurement.models.Client;
 import com.measurement.services.ClientService;
@@ -84,6 +85,71 @@ private static final long serialVersionUID = 4304802158559819925L;
 		}
 	}
 	
+	private void eventHandlers() {
+		
+		btnFirst.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentPage = 1;
+				initTable();
+			}
+		});
+		btnPrev.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (currentPage > 1) {
+					currentPage = currentPage - 1;
+					initTable();
+				}
+				
+			}
+		});
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (currentPage < page.getTotalPage() ) {
+					currentPage = currentPage + 1;
+					initTable();
+				}
+				
+			}
+		});
+		btnLast.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentPage = page.getTotalPage();
+				initTable();
+			}
+		});
+		
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showClienteFrame(Constants.ADD);
+				initTable();
+			}
+		});
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getLinhaTabela();
+				showClienteFrame(Constants.UPDATE);
+				initTable();
+			}
+		});
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getLinhaTabela();
+				showClienteFrame(Constants.DELETE);
+				initTable();
+				
+			}
+		});
+		btnConsult.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getLinhaTabela();
+				showClienteFrame(Constants.CONSULT);
+			}
+		});
+	
+	
+	}
 	public void initComponents() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 983, 656);
@@ -167,6 +233,38 @@ private static final long serialVersionUID = 4304802158559819925L;
 		panel_1.add(btnLast);
 	}
 	
+	public void initialTable() {
+    	
+    	listarCliente();
+   	
+    	model = new TableClientModel(page.getContent());
+    	
+    	model.fireTableDataChanged();
+    	
+    	table.setModel(model);
+    	
+    	RenderHeaderTable renderHeader = new RenderHeaderTable();
+    	
+    	table.getTableHeader().setDefaultRenderer(renderHeader);
+    	
+    	RenderTable render = new RenderTable();
+    	
+    	for (int column=0; column < model.getColumnCount(); column++) {
+    		table.setDefaultRenderer(model.getColumnClass(column), render);
+    	}
+    	
+    	
+    	for (int col = 0; col < model.getColumnCount(); col++) {
+    		TableColumn column = table.getColumnModel().getColumn(col);
+    		column.setMinWidth(100);
+    		column.setMaxWidth(100);
+    		column.setPreferredWidth(100);
+    	}
+    	
+    	
+    	
+    }
+
 	public void showClient() {
 		page = getClientService().paginatedList(currentPage, pageLength);
 	}
@@ -219,4 +317,33 @@ private static final long serialVersionUID = 4304802158559819925L;
 	}
 	
 	ClientService getClientService() {return new ClientService(); }
+}
+
+public ClientService getClienteService() {
+	return new ClientService();
+}
+
+
+public int getLine() {
+	return line;
+}
+
+
+public void setLine(int line) {
+	this.line = line;
+}
+
+
+public int getColumn() {
+	return column;
+}
+
+
+public void setColumn(int column) {
+	this.column = column;
+}
+
+
+public Client getClient() {
+	return new Client();
 }

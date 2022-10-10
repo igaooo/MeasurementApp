@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import com.measurement.config.Page;
 import com.measurement.models.Client;
 
+
 public class ClientDAO {
     private EntityManager entityManager;
 
